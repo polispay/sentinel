@@ -34,7 +34,7 @@ class PolisConfig():
         creds = {key: value for (key, value) in match}
 
         # standard Polis defaults...
-        default_port = 9998 if (network == 'mainnet') else 19998
+        default_port = 24127 if (network == 'mainnet') else 124127
 
         # use default port for network if not specified in polis.conf
         if not ('port' in creds):
