@@ -6,7 +6,7 @@ An all-powerful toolset for Polis.
 
 Sentinel is an autonomous agent for persisting, processing and automating Polis V1 governance objects and tasks, and for expanded functions in the upcoming Polis V13 release (Evolution).
 
-Sentinel is implemented as a Python application that binds to a local version 1 dashd instance on each Polis V1 Masternode.
+Sentinel is implemented as a Python application that binds to a local version 1 polisd instance on each Polis V1 Masternode.
 
 This guide covers installing Sentinel onto an existing 1 Masternode in Ubuntu 14.04 / 16.04.
 
@@ -23,9 +23,9 @@ Update system packages and ensure virtualenv is installed:
     $ sudo apt-get update
     $ sudo apt-get -y install python-virtualenv
 
-Make sure the local Dash daemon running is at least version 12.1 (120100)
+Make sure the local Polis daemon running is at least version 12.1 (120100)
 
-    $ dash-cli getinfo | grep version
+    $ polis-cli getinfo | grep version
 
 ### 2. Install Sentinel
 

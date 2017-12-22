@@ -19,26 +19,26 @@ class GovernanceClass(object):
         return self.governance_object
 
     # pass thru to GovernanceObject#vote
-    def vote(self, dashd, signal, outcome):
-        return self.go.vote(dashd, signal, outcome)
+    def vote(self, polisd, signal, outcome):
+        return self.go.vote(polisd, signal, outcome)
 
     # pass thru to GovernanceObject#voted_on
     def voted_on(self, **kwargs):
         return self.go.voted_on(**kwargs)
 
-    def vote_validity(self, dashd):
+    def vote_validity(self, polisd):
         if self.is_valid():
             printdbg("Voting valid! %s: %d" % (self.__class__.__name__, self.id))
-            self.vote(dashd, models.VoteSignals.valid, models.VoteOutcomes.yes)
+            self.vote(polisd, models.VoteSignals.valid, models.VoteOutcomes.yes)
         else:
             printdbg("Voting INVALID! %s: %d" % (self.__class__.__name__, self.id))
-            self.vote(dashd, models.VoteSignals.valid, models.VoteOutcomes.no)
+            self.vote(polisd, models.VoteSignals.valid, models.VoteOutcomes.no)
 
     def get_submit_command(self):
         object_fee_tx = self.go.object_fee_tx
 
-        import dashlib
-        obj_data = dashlib.SHIM_serialise_for_dashd(self.serialise())
+        import polislib
+        obj_data = polislib.SHIM_serialise_for_polisd(self.serialise())
 
         cmd = ['gobject', 'submit', '0', '1', str(int(time.time())), obj_data, object_fee_tx]
 
@@ -55,12 +55,12 @@ class GovernanceClass(object):
             "AbstainCount": self.go.abstain_count,
         }
 
-        # return a dict similar to dashd "gobject list" output
+        # return a dict similar to polisd "gobject list" output
         return {self.object_hash: dikt}
 
     def get_submit_command(self):
-        import dashlib
-        obj_data = dashlib.SHIM_serialise_for_dashd(self.serialise())
+        import polislib
+        obj_data = polislib.SHIM_serialise_for_polisd(self.serialise())
 
         # new objects won't have parent_hash, revision, etc...
         cmd = ['gobject', 'submit', '0', '1', str(int(time.time())), obj_data]
@@ -71,15 +71,15 @@ class GovernanceClass(object):
 
         return cmd
 
-    def submit(self, dashd):
+    def submit(self, polisd):
         # don't attempt to submit a superblock unless a masternode
         # note: will probably re-factor this, this has code smell
-        if (self.only_masternode_can_submit and not dashd.is_masternode()):
+        if (self.only_masternode_can_submit and not polisd.is_masternode()):
             print("Not a masternode. Only masternodes may submit these objects")
             return
 
         try:
-            object_hash = dashd.rpc_command(*self.get_submit_command())
+            object_hash = polisd.rpc_command(*self.get_submit_command())
             printdbg("Submitted: [%s]" % object_hash)
         except JSONRPCException as e:
             print("Unable to submit: %s" % e.message)
@@ -95,9 +95,9 @@ class GovernanceClass(object):
 
         return binascii.hexlify(simplejson.dumps((obj_type, self.get_dict()), sort_keys=True).encode('utf-8')).decode('utf-8')
 
-    def dashd_serialise(self):
-        import dashlib
-        return dashlib.SHIM_serialise_for_dashd(self.serialise())
+    def polisd_serialise(self):
+        import polislib
+        return polislib.SHIM_serialise_for_polisd(self.serialise())
 
     @classmethod
     def serialisable_fields(self):
