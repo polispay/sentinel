@@ -21,7 +21,7 @@ def test_polisd():
         if line.startswith('testnet=1'):
             network = 'testnet'
             is_testnet = True
-            genesis_hash = u'00000aa65e8b9642625a1d0ee81686b5bc7c8da28bcb68b454592ab06f230782'
+            genesis_hash = u'000000ca90aac9a933dd4cfc07d8e6731e2054a137ba88c4848d21ad7ac289c5'
 
     creds = PolisConfig.get_rpc_creds(config_text, network)
     polisd = PolisDaemon(**creds)
@@ -29,7 +29,7 @@ def test_polisd():
 
     assert hasattr(polisd, 'rpc_connection')
 
-    # Polis testnet block 0 hash == 00000bafbc94add76cb75e2ec92894837288a481e5c005f6563d91623bf8bc2c
+    # Polis testnet block 0 hash == 000000ca90aac9a933dd4cfc07d8e6731e2054a137ba88c4848d21ad7ac289c5
     # test commands without arguments
     info = polisd.rpc_command('getinfo')
     info_keys = [
