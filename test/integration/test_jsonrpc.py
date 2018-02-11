@@ -21,7 +21,7 @@ def test_polisd():
         if line.startswith('testnet=1'):
             network = 'testnet'
             is_testnet = True
-            genesis_hash = u'000000ca90aac9a933dd4cfc07d8e6731e2054a137ba88c4848d21ad7ac289c5'
+            genesis_hash = u'00000dfd7b3052bd8489814d6dca74188a244ce83e40c71dca9efea02c73074d'
 
     creds = PolisConfig.get_rpc_creds(config_text, network)
     polisd = PolisDaemon(**creds)
