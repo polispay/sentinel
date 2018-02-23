@@ -4,11 +4,11 @@ An all-powerful toolset for Polis.
 
 [![Build Status](https://travis-ci.org/polispay/sentinel.svg?branch=master)](https://travis-ci.org/polispay/sentinel)
 
-Sentinel is an autonomous agent for persisting, processing and automating Polis V1 governance objects and tasks, and for expanded functions in the upcoming Polis V13 release (Evolution).
+Sentinel is an autonomous agent for persisting, processing and automating Polis governance objects and tasks, and for expanded functions in the upcoming Polis V2 release.
 
-Sentinel is implemented as a Python application that binds to a local version 1 polisd instance on each Polis V1 Masternode.
+Sentinel is implemented as a Python application that binds to a local version 12 polisd instance on each Polis Masternode.
 
-This guide covers installing Sentinel onto an existing 1 Masternode in Ubuntu 14.04 / 16.04.
+This guide covers installing Sentinel onto an existing Masternode in Ubuntu 14.04 / 16.04.
 
 ## Installation
 
@@ -67,11 +67,11 @@ To view debug output, set the `SENTINEL_DEBUG` environment variable to anything 
 
 ## Contributing
 
-Please follow the [PolisCore guidelines for contributing](https://github.com/polispay/polis/blob/v0.12.1.x/CONTRIBUTING.md).
+Please follow the [PolisCore guidelines for contributing](https://github.com/polispay/polis/blob/master/CONTRIBUTING.md).
 
 Specifically:
 
-* [Contributor Workflow](https://github.com/polispay/polis/blob/v0.12.1.x/CONTRIBUTING.md#contributor-workflow)
+* [Contributor Workflow](https://github.com/polispay/polis/blob/master/CONTRIBUTING.md#contributor-workflow)
 
     To contribute a patch, the workflow is as follows:
 

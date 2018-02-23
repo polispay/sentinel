@@ -36,6 +36,8 @@ class PolisDaemon():
         config_text = PolisConfig.slurp_config_file(polis_dot_conf)
         creds = PolisConfig.get_rpc_creds(config_text, config.network)
 
+        creds[u'host'] = config.rpc_host
+
         return self(**creds)
 
     def rpc_command(self, *params):

@@ -32,7 +32,10 @@ db.connect()
 DASHD_GOVOBJ_TYPES = {
     'proposal': 1,
     'superblock': 2,
-    'watchdog': 3,
+}
+GOVOBJ_TYPE_STRINGS = {
+    1: 'proposal',
+    2: 'trigger',  # it should be trigger here, not superblock
 }
 
 # schema version follows format 'YYYYMMDD-NUM'.
@@ -82,11 +85,14 @@ class GovernanceObject(BaseModel):
             for purged in self.purged_network_objects(list(golist.keys())):
                 # SOMEDAY: possible archive step here
                 purged.delete_instance(recursive=True, delete_nullable=True)
-
-            for item in golist.values():
-                (go, subobj) = self.import_gobject_from_polisd(polisd, item)
         except Exception as e:
-            printdbg("Got an error upon import: %s" % e)
+            printdbg("Got an error while purging: %s" % e)
+
+        for item in golist.values():
+            try:
+                (go, subobj) = self.import_gobject_from_polisd(polisd, item)
+            except Exception as e:
+                printdbg("Got an error upon import: %s" % e)
 
     @classmethod
     def purged_network_objects(self, network_object_hashes):
@@ -99,9 +105,7 @@ class GovernanceObject(BaseModel):
     def import_gobject_from_polisd(self, polisd, rec):
         import decimal
         import polislib
-        import inflection
 
-        object_hex = rec['DataHex']
         object_hash = rec['Hash']
 
         gobj_dict = {
@@ -113,14 +117,21 @@ class GovernanceObject(BaseModel):
             'no_count': rec['NoCount'],
         }
 
+
         # shim/polisd conversion
-        object_hex = polislib.SHIM_deserialise_from_polisd(object_hex)
-        objects = polislib.deserialise(object_hex)
+        # eventually we'll remove the shim method entirely
+        dikt = polislib.deserialise(
+            polislib.SHIM_deserialise_from_polisd(
+                rec['DataHex']
+            )
+        )
         subobj = None
 
-        obj_type, dikt = objects[0:2:1]
-        obj_type = inflection.pluralize(obj_type)
-        subclass = self._meta.reverse_rel[obj_type].model_class
+        type_class_map = {
+            1: Proposal,
+            2: Superblock,
+        }
+        subclass = type_class_map[dikt['type']]
 
         # set object_type in govobj table
         gobj_dict['object_type'] = subclass.govobj_type
@@ -595,49 +606,6 @@ class Vote(BaseModel):
         db_table = 'votes'
 
 
-class Watchdog(BaseModel, GovernanceClass):
-    governance_object = ForeignKeyField(GovernanceObject, related_name='watchdogs')
-    created_at = IntegerField()
-    object_hash = CharField(max_length=64)
-
-    govobj_type = DASHD_GOVOBJ_TYPES['watchdog']
-    only_masternode_can_submit = True
-
-    @classmethod
-    def active(self, polisd):
-        now = int(time.time())
-        resultset = self.select().where(
-            self.created_at >= (now - polisd.SENTINEL_WATCHDOG_MAX_SECONDS)
-        )
-        return resultset
-
-    @classmethod
-    def expired(self, polisd):
-        now = int(time.time())
-        resultset = self.select().where(
-            self.created_at < (now - polisd.SENTINEL_WATCHDOG_MAX_SECONDS)
-        )
-        return resultset
-
-    def is_expired(self, polisd):
-        now = int(time.time())
-        return (self.created_at < (now - polisd.SENTINEL_WATCHDOG_MAX_SECONDS))
-
-    def is_valid(self, polisd):
-        if self.is_expired(polisd):
-            return False
-
-        return True
-
-    def is_deletable(self, polisd):
-        if self.is_expired(polisd):
-            return True
-
-        return False
-
-    class Meta:
-        db_table = 'watchdogs'
-
 
 class Transient(object):
 
@@ -746,8 +714,7 @@ def db_models():
         Superblock,
         Signal,
         Outcome,
-        Vote,
-        Watchdog
+        Vote
     ]
     return models
 
