@@ -12,7 +12,7 @@ from peewee import IntegerField, CharField, TextField, ForeignKeyField, DecimalF
 import peewee
 import playhouse.signals
 import misc
-import polisd
+import dashd
 from misc import (printdbg, is_numeric)
 import config
 from bitcoinrpc.authproxy import JSONRPCException
@@ -116,7 +116,6 @@ class GovernanceObject(BaseModel):
             'yes_count': rec['YesCount'],
             'no_count': rec['NoCount'],
         }
-
 
         # shim/polisd conversion
         # eventually we'll remove the shim method entirely
@@ -604,8 +603,6 @@ class Vote(BaseModel):
 
     class Meta:
         db_table = 'votes'
-
-
 
 class Transient(object):
 
