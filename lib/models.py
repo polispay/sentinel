@@ -12,7 +12,7 @@ from peewee import IntegerField, CharField, TextField, ForeignKeyField, DecimalF
 import peewee
 import playhouse.signals
 import misc
-import dashd
+import polisd
 from misc import (printdbg, is_numeric)
 import config
 from bitcoinrpc.authproxy import JSONRPCException
@@ -603,6 +603,7 @@ class Vote(BaseModel):
 
     class Meta:
         db_table = 'votes'
+
 
 class Transient(object):
 
