@@ -7,12 +7,12 @@ sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), '../../
 
 @pytest.fixture
 def valid_polis_address(network='mainnet'):
-    return 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdus' if (network == 'testnet') else 'XpjStRH8SgA6PjgebtPZqCa9y7hLXP767n'
+    return 'yYe8KwyaUu5YswSYmB3q3ryx8XTUu9y7Ui' if (network == 'testnet') else 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdus'
 
 
 @pytest.fixture
 def invalid_polis_address(network='mainnet'):
-    return 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdus' if (network == 'testnet') else 'XpjStRH8SgA6PjgebtPZqCa9y7hLXP767m'
+    return 'yYe8KwyaUu5YswSYmB3q3ryx8XTUu9y7Ui' if (network == 'testnet') else 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdus'
 
 
 @pytest.fixture
