@@ -4,7 +4,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
 import init
 import time
-import binascii
 import datetime
 import re
 import simplejson
@@ -105,6 +104,8 @@ class GovernanceObject(BaseModel):
     def import_gobject_from_polisd(self, polisd, rec):
         import decimal
         import polislib
+        import binascii
+        import gobject_json
 
         object_hash = rec['Hash']
 
@@ -117,13 +118,10 @@ class GovernanceObject(BaseModel):
             'no_count': rec['NoCount'],
         }
 
-        # shim/polisd conversion
-        # eventually we'll remove the shim method entirely
-        dikt = polislib.deserialise(
-            polislib.SHIM_deserialise_from_polisd(
-                rec['DataHex']
-            )
-        )
+        # deserialise and extract object
+        json_str = binascii.unhexlify(rec['DataHex']).decode('utf-8')
+        dikt = gobject_json.extract_object(json_str)
+
         subobj = None
 
         type_class_map = {
@@ -324,6 +322,11 @@ class Proposal(GovernanceClass, BaseModel):
                 printdbg("\tProposal URL [%s] too short, returning False" % self.url)
                 return False
 
+            # proposal URL has any whitespace
+            if (re.search(r'\s', self.url)):
+                printdbg("\tProposal URL [%s] has whitespace, returning False" % self.name)
+                return False
+
             try:
                 parsed = urlparse.urlparse(self.url)
             except Exception as e:
@@ -368,15 +371,6 @@ class Proposal(GovernanceClass, BaseModel):
         printdbg("Leaving Proposal#is_expired, Expired = False")
         return False
 
-    def is_deletable(self):
-        # end_date < (current_date - 30 days)
-        thirty_days = (86400 * 30)
-        if (self.end_epoch < (misc.now() - thirty_days)):
-            return True
-
-        # TBD (item moved to external storage/PolisDrive, etc.)
-        return False
-
     @classmethod
     def approved_and_ranked(self, proposal_quorum, next_superblock_max_budget):
         # return all approved proposals, in order of descending vote count
@@ -417,28 +411,6 @@ class Proposal(GovernanceClass, BaseModel):
         if self.governance_object:
             rank = self.governance_object.absolute_yes_count
             return rank
-
-    def get_prepare_command(self):
-        import polislib
-        obj_data = polislib.SHIM_serialise_for_polisd(self.serialise())
-
-        # new superblocks won't have parent_hash, revision, etc...
-        cmd = ['gobject', 'prepare', '0', '1', str(int(time.time())), obj_data]
-
-        return cmd
-
-    def prepare(self, polisd):
-        try:
-            object_hash = polisd.rpc_command(*self.get_prepare_command())
-            printdbg("Submitted: [%s]" % object_hash)
-            self.go.object_fee_tx = object_hash
-            self.go.save()
-
-            manual_submit = ' '.join(self.get_submit_command())
-            print(manual_submit)
-
-        except JSONRPCException as e:
-            print("Unable to prepare: %s" % e.message)
 
 
 class Superblock(BaseModel, GovernanceClass):
@@ -496,11 +468,6 @@ class Superblock(BaseModel, GovernanceClass):
 
         printdbg("Leaving Superblock#is_valid, Valid = True")
         return True
-
-    def is_deletable(self):
-        # end_date < (current_date - 30 days)
-        # TBD (item moved to external storage/PolisDrive, etc.)
-        pass
 
     def hash(self):
         import polislib

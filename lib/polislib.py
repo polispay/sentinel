@@ -215,17 +215,6 @@ def SHIM_serialise_for_polisd(sentinel_hex):
     return polisd_hex
 
 
-# shims 'til we can fix the JSON format
-def SHIM_deserialise_from_polisd(polisd_hex):
-    # unpack
-    obj = deserialise(polisd_hex)
-
-    # re-pack, extracting the single element (JSON object)
-    sentinel_hex = serialise(obj[0][1])
-
-    return sentinel_hex
-
-
 # convenience
 def deserialise(hexdata):
     json = binascii.unhexlify(hexdata)
