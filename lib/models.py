@@ -28,7 +28,7 @@ db.connect()
 
 
 # TODO: lookup table?
-DASHD_GOVOBJ_TYPES = {
+POLISD_GOVOBJ_TYPES = {
     'proposal': 1,
     'superblock': 2,
 }
@@ -279,7 +279,7 @@ class Proposal(GovernanceClass, BaseModel):
     # src/governance-validators.cpp
     MAX_DATA_SIZE = 512
 
-    govobj_type = DASHD_GOVOBJ_TYPES['proposal']
+    govobj_type = POLISD_GOVOBJ_TYPES['proposal']
 
     class Meta:
         db_table = 'proposals'
@@ -430,7 +430,7 @@ class Superblock(BaseModel, GovernanceClass):
     sb_hash = CharField()
     object_hash = CharField(max_length=64)
 
-    govobj_type = DASHD_GOVOBJ_TYPES['superblock']
+    govobj_type = POLISD_GOVOBJ_TYPES['superblock']
     only_masternode_can_submit = True
 
     class Meta:

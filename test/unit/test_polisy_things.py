@@ -12,7 +12,7 @@ def valid_polis_address(network='mainnet'):
 
 @pytest.fixture
 def invalid_polis_address(network='mainnet'):
-    return 'yYe8KwyaUu5YswSYmB3q3ryx8XTUu9y7Ui' if (network == 'testnet') else 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdus'
+    return 'yYe8KwyaUu5YswSYmB3q3ryx8XTUu9y7Uj' if (network == 'testnet') else 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdut'
 
 
 @pytest.fixture
