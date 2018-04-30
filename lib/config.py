@@ -15,11 +15,14 @@ min_polisd_proto_version_with_sentinel_ping = 70207
 
 
 def get_polis_conf():
-    home = os.environ.get('HOME')
+    if sys.platform == 'win32':
+        polis_conf = os.path.join(os.getenv('APPDATA'), "DashCore/polis.conf")
+    else:
+        home = os.environ.get('HOME')
 
-    polis_conf = os.path.join(home, ".poliscore/polis.conf")
-    if sys.platform == 'darwin':
-        polis_conf = os.path.join(home, "Library/Application Support/PolisCore/polis.conf")
+        polis_conf = os.path.join(home, ".poliscore/polis.conf")
+        if sys.platform == 'darwin':
+            polis_conf = os.path.join(home, "Library/Application Support/DashCore/polis.conf")
 
     polis_conf = sentinel_cfg.get('polis_conf', polis_conf)
 
