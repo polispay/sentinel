@@ -162,7 +162,7 @@ def test_proposal_is_valid(proposal):
     proposal.payment_address = '7'
     assert proposal.is_valid() is False
 
-    proposal.payment_address = 'YYE8KWYAUU5YSWSYMB3Q3RYX8XTUU9Y7UI'
+    proposal.payment_address = 'TXDSaTXerg68SCyLkWw2ERsqoTMWRBZiZu'
     assert proposal.is_valid() is False
 
     proposal.payment_address = 'TXDSaTXerg68SCyLkWw2ERsqoTMWRBZiZr'
