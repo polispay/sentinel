@@ -330,7 +330,7 @@ class Proposal(GovernanceClass, BaseModel):
                 printdbg("\tProposal URL [%s] has whitespace, returning False" % self.name)
                 return False
 
-            # Dash Core restricts proposals to 512 bytes max
+            # Polis Core restricts proposals to 512 bytes max
             if len(self.serialise()) > (self.MAX_DATA_SIZE * 2):
                 printdbg("\tProposal [%s] is too big, returning False" % self.name)
                 return False
