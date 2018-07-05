@@ -111,7 +111,7 @@ def test_extract_object():
         'url': 'https://www.dashcentral.org/black-pearl',
         'start_epoch': 1521429194,
         'end_epoch': 1547183994,
-        'payment_address': 'yYe8KwyaUu5YswSYmB3q3ryx8XTUu9y7Ui',
+        'payment_address': 'TXDSaTXerg68SCyLkWw2ERsqoTMWRBZiZQ',
         'payment_amount': Decimal('49'),
     }
 
@@ -127,7 +127,7 @@ def test_extract_object():
     expected = {
         'type': 2,
         'event_block_height': 62500,
-        'payment_addresses': 'yYe8KwyaUu5YswSYmB3q3ryx8XTUu9y7Ui|yTC62huR4YQEPn9AJHjnQxxreHSbgAoatV',
+        'payment_addresses': 'TXDSaTXerg68SCyLkWw2ERsqoTMWRBZiZQ|TDWz9KfMo55wzj2brbgaXxnDz28nAbdPcY',
         'payment_amounts': '5|3',
     }
 
