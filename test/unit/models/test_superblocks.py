@@ -271,15 +271,3 @@ def test_superblock_size_limit(go_list_proposals):
     assert sb.proposal_hashes == 'dfd7d63979c0b62456b63d5fc5306dbec451180adee85876cbf5b28c69d1a86c'
 
     assert sb.hex_hash() == 'ef6d1ad5a474bc77537c1fc6c256c4c6bd5d1e635bc6d9616b1c5e257895f9f3'
-
-
-#def test_deterministic_superblock_selection(go_list_superblocks):
-#    from polisd import PolisDaemon
-#    polisd = PolisDaemon.from_polis_conf(config.polis_conf)
-#
-#    for item in go_list_superblocks:
-#        (go, subobj) = GovernanceObject.import_gobject_from_polisd(polisd, item)
-#
-#    # highest hash wins if same -- so just order by hash
-#    sb = Superblock.find_highest_deterministic('542f4433e438bdd64697b8381fda1a7a9b7a111c3a4e32fad524d1821d820394')
-#    assert sb.object_hash == 'bc2834f357da7504138566727c838e6ada74d079e63b6104701f4f8eb05dae36'
