@@ -23,7 +23,7 @@ Update system packages and ensure virtualenv is installed:
     $ sudo apt-get update
     $ sudo apt-get -y install python-virtualenv
 
-Make sure the local Polis daemon running is at least version 1.3.0 (1030000)
+Make sure the local Polis daemon running is at least version 1.3.1 (1030100)
 
     $ polis-cli getinfo | grep version
 
