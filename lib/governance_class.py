@@ -35,30 +35,7 @@ class GovernanceClass(object):
             self.vote(polisd, models.VoteSignals.valid, models.VoteOutcomes.no)
 
     def get_submit_command(self):
-        object_fee_tx = self.go.object_fee_tx
 
-        import polislib
-        obj_data = polislib.SHIM_serialise_for_polisd(self.serialise())
-
-        cmd = ['gobject', 'submit', '0', '1', str(int(time.time())), obj_data, object_fee_tx]
-
-        return cmd
-
-    def list(self):
-        dikt = {
-            "DataHex": self.serialise(),
-            "Hash": self.object_hash,
-            "CollateralHash": self.go.object_fee_tx,
-            "AbsoluteYesCount": self.go.absolute_yes_count,
-            "YesCount": self.go.yes_count,
-            "NoCount": self.go.no_count,
-            "AbstainCount": self.go.abstain_count,
-        }
-
-        # return a dict similar to polisd "gobject list" output
-        return {self.object_hash: dikt}
-
-    def get_submit_command(self):
         import polislib
         obj_data = polislib.SHIM_serialise_for_polisd(self.serialise())
 
@@ -85,15 +62,10 @@ class GovernanceClass(object):
             print("Unable to submit: %s" % e.message)
 
     def serialise(self):
-        import inflection
         import binascii
         import simplejson
 
-        # 'proposal', 'superblock', etc.
-        name = self._meta.name
-        obj_type = inflection.singularize(name)
-
-        return binascii.hexlify(simplejson.dumps((obj_type, self.get_dict()), sort_keys=True).encode('utf-8')).decode('utf-8')
+        return binascii.hexlify(simplejson.dumps(self.get_dict(), sort_keys=True).encode('utf-8')).decode('utf-8')
 
     def polisd_serialise(self):
         import polislib
@@ -120,5 +92,7 @@ class GovernanceClass(object):
 
         for field_name in self.serialisable_fields():
             dikt[field_name] = getattr(self, field_name)
+
+        dikt['type'] = getattr(self, 'govobj_type')
 
         return dikt

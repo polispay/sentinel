@@ -10,16 +10,19 @@ default_sentinel_config = os.path.normpath(
 )
 sentinel_config_file = os.environ.get('SENTINEL_CONFIG', default_sentinel_config)
 sentinel_cfg = PolisConfig.tokenize(sentinel_config_file)
-sentinel_version = "1.1.0"
+sentinel_version = "1.2.0"
 min_polisd_proto_version_with_sentinel_ping = 70207
 
 
 def get_polis_conf():
-    home = os.environ.get('HOME')
+    if sys.platform == 'win32':
+        polis_conf = os.path.join(os.getenv('APPDATA'), "PolisCore/polis.conf")
+    else:
+        home = os.environ.get('HOME')
 
-    polis_conf = os.path.join(home, ".poliscore/polis.conf")
-    if sys.platform == 'darwin':
-        polis_conf = os.path.join(home, "Library/Application Support/PolisCore/polis.conf")
+        polis_conf = os.path.join(home, ".poliscore/polis.conf")
+        if sys.platform == 'darwin':
+            polis_conf = os.path.join(home, "Library/Application Support/PolisCore/polis.conf")
 
     polis_conf = sentinel_cfg.get('polis_conf', polis_conf)
 
@@ -28,6 +31,10 @@ def get_polis_conf():
 
 def get_network():
     return sentinel_cfg.get('network', 'mainnet')
+
+
+def get_rpchost():
+    return sentinel_cfg.get('rpchost', '127.0.0.1')
 
 
 def sqlite_test_db_name(sqlite_file_path):
@@ -81,4 +88,5 @@ def get_db_conn():
 
 polis_conf = get_polis_conf()
 network = get_network()
+rpc_host = get_rpchost()
 db = get_db_conn()
