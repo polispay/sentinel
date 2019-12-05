@@ -30,16 +30,7 @@ def prune_expired_proposals(polisd):
         proposal.vote(polisd, VoteSignals.delete, VoteOutcomes.yes)
 
 
-# ping polisd
-def sentinel_ping(polisd):
-    printdbg("in sentinel_ping")
-
-    polisd.ping()
-
-    printdbg("leaving sentinel_ping")
-
-
-def attempt_superblock_creation(polisd):
+def attempt_superblock_creation(dashd):
     import polislib
 
     if not polisd.is_masternode():
@@ -74,8 +65,7 @@ def attempt_superblock_creation(polisd):
     budget_max = polisd.get_superblock_budget_allocation(event_block_height)
     sb_epoch_time = polisd.block_height_to_epoch(event_block_height)
 
-    maxgovobjdatasize = polisd.govinfo['maxgovobjdatasize']
-    sb = polislib.create_superblock(proposals, event_block_height, budget_max, sb_epoch_time, maxgovobjdatasize)
+    sb = polislib.create_superblock(proposals, event_block_height, budget_max, sb_epoch_time)
     if not sb:
         printdbg("No superblock created, sorry. Returning.")
         return
@@ -125,6 +115,11 @@ def main():
     polisd = PolisDaemon.from_polis_conf(config.polis_conf)
     options = process_args()
 
+    # print version and return if "--version" is an argument
+    if options.version:
+        print("Polis Sentinel v%s" % config.sentinel_version)
+        return
+
     # check polisd connectivity
     if not is_polisd_port_open(polisd):
         print("Cannot connect to polisd. Please ensure polisd is running and the JSONRPC port is open to Sentinel.")
@@ -170,9 +165,6 @@ def main():
     # load "gobject list" rpc command data, sync objects into internal database
     perform_polisd_object_sync(polisd)
 
-    if polisd.has_sentinel_ping:
-        sentinel_ping(polisd)
-
     # auto vote network objects as valid/invalid
     # check_object_validity(polisd)
 
@@ -202,6 +194,10 @@ def process_args():
                         action='store_true',
                         help='Bypass scheduler and sync/vote immediately',
                         dest='bypass')
+    parser.add_argument('-v', '--version',
+                        action='store_true',
+                        help='Print the version (Dash Sentinel vX.X.X) and exit')
+
     args = parser.parse_args()
 
     return args

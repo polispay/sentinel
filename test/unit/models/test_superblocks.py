@@ -235,9 +235,7 @@ def test_deterministic_superblock_creation(go_list_proposals):
     max_budget = 60
     prop_list = Proposal.approved_and_ranked(proposal_quorum=1, next_superblock_max_budget=max_budget)
 
-    # MAX_GOVERNANCE_OBJECT_DATA_SIZE defined in governance-object.h
-    maxgovobjdatasize = 16 * 1024
-    sb = polislib.create_superblock(prop_list, 72000, max_budget, misc.now(), maxgovobjdatasize)
+    sb = polislib.create_superblock(prop_list, 72000, max_budget, misc.now())
 
     assert sb.event_block_height == 72000
     assert sb.payment_addresses == 'TXDSaTXerg68SCyLkWw2ERsqoTMWRBZiZQ|TDWz9KfMo55wzj2brbgaXxnDz28nAbdPcY'
@@ -247,27 +245,13 @@ def test_deterministic_superblock_creation(go_list_proposals):
     assert sb.hex_hash() == '93f37147fb086c1948f2d73f29e4a20f846cdaeef515c2c8701925b664bae024'
 
 
-def test_superblock_size_limit(go_list_proposals):
-    import polislib
-    import misc
+def test_deterministic_superblock_selection(go_list_superblocks):
     from polisd import PolisDaemon
-    polisd = PolisDaemon.from_polis_conf(config.polis_conf)
-    for item in go_list_proposals:
-        (go, subobj) = GovernanceObject.import_gobject_from_polisd(polisd, item)
+    polisd = PolisDaemon.from_dash_conf(config.dash_conf)
 
-    max_budget = 60
-    prop_list = Proposal.approved_and_ranked(proposal_quorum=1, next_superblock_max_budget=max_budget)
+    for item in go_list_superblocks:
+        (go, subobj) = GovernanceObject.import_gobject_from_dashd(polisd, item)
 
-    maxgovobjdatasize = 469
-    sb = polislib.create_superblock(prop_list, 72000, max_budget, misc.now(), maxgovobjdatasize)
-
-    # two proposals in the list, but...
-    assert len(prop_list) == 2
-
-    # only one should have been included in the SB, because the 2nd one is over the limit
-    assert sb.event_block_height == 72000
-    assert sb.payment_addresses == 'TXDSaTXerg68SCyLkWw2ERsqoTMWRBZiZQ'
-    assert sb.payment_amounts == '25.75000000'
-    assert sb.proposal_hashes == 'dfd7d63979c0b62456b63d5fc5306dbec451180adee85876cbf5b28c69d1a86c'
-
-    assert sb.hex_hash() == 'ef6d1ad5a474bc77537c1fc6c256c4c6bd5d1e635bc6d9616b1c5e257895f9f3'
+    # highest hash wins if same -- so just order by hash
+    sb = Superblock.find_highest_deterministic('542f4433e438bdd64697b8381fda1a7a9b7a111c3a4e32fad524d1821d820394')
+    assert sb.object_hash == 'bc2834f357da7504138566727c838e6ada74d079e63b6104701f4f8eb05dae36'

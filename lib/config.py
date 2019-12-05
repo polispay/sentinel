@@ -10,9 +10,7 @@ default_sentinel_config = os.path.normpath(
 )
 sentinel_config_file = os.environ.get('SENTINEL_CONFIG', default_sentinel_config)
 sentinel_cfg = PolisConfig.tokenize(sentinel_config_file)
-sentinel_version = "1.2.0"
-min_polisd_proto_version_with_sentinel_ping = 70207
-
+sentinel_version = "1.4.0"
 
 def get_polis_conf():
     if sys.platform == 'win32':

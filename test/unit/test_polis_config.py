@@ -62,7 +62,23 @@ def test_get_rpc_creds():
     assert creds.get('port') == 24131
 
 
-# ensure polis network (mainnet, testnet) matches that specified in config
-# requires running polisd on whatever port specified...
-#
-# This is more of a polisd/jsonrpc test than a config test...
+def test_slurp_config_file():
+    import tempfile
+
+    dash_config = """# basic settings
+#testnet=1 # TESTNET
+server=1
+printtoconsole=1
+txindex=1 # enable transaction index
+"""
+
+    expected_stripped_config = """server=1
+printtoconsole=1
+txindex=1 # enable transaction index
+"""
+
+    with tempfile.NamedTemporaryFile(mode='w') as temp:
+        temp.write(dash_config)
+        temp.flush()
+        conf = PolisConfig.slurp_config_file(temp.name)
+        assert conf == expected_stripped_config
