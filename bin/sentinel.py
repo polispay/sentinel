@@ -30,7 +30,7 @@ def prune_expired_proposals(polisd):
         proposal.vote(polisd, VoteSignals.delete, VoteOutcomes.yes)
 
 
-def attempt_superblock_creation(dashd):
+def attempt_superblock_creation(polisd):
     import polislib
 
     if not polisd.is_masternode():
