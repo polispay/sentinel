@@ -179,7 +179,6 @@ class PolisDaemon():
         """
         Called by block_height_to_epoch if block height is in the future.
         Call `block_height_to_epoch` instead of this method.
-
         DO NOT CALL DIRECTLY if you don't want a "Oh Noes." exception.
         """
         current_block_height = self.rpc_command('getblockcount')

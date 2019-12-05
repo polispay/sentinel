@@ -247,10 +247,10 @@ def test_deterministic_superblock_creation(go_list_proposals):
 
 def test_deterministic_superblock_selection(go_list_superblocks):
     from polisd import PolisDaemon
-    polisd = PolisDaemon.from_dash_conf(config.dash_conf)
+    polisd = PolisDaemon.from_polis_conf(config.polis_conf)
 
     for item in go_list_superblocks:
-        (go, subobj) = GovernanceObject.import_gobject_from_dashd(polisd, item)
+        (go, subobj) = GovernanceObject.import_gobject_from_polisd(polisd, item)
 
     # highest hash wins if same -- so just order by hash
     sb = Superblock.find_highest_deterministic('542f4433e438bdd64697b8381fda1a7a9b7a111c3a4e32fad524d1821d820394')
