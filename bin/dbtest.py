@@ -19,8 +19,8 @@ import misc
 
 pr = Proposal(
     name='proposal7',
-    url='https://poliscentral.com/proposal7',
-    payment_address='TDWz9KfMo55wzj2brbgaXxnDz28nAbdPcY',
+    url='https://dashcentral.com/proposal7',
+    payment_address='yTC62huR4YQEPn9AJHjnQxxreHSbgAoatV',
     payment_amount=39.23,
     start_epoch=1483250400,
     end_epoch=1491022800,
@@ -28,7 +28,7 @@ pr = Proposal(
 
 # sb = Superblock(
 #     event_block_height = 62500,
-#     payment_addresses = "TXDSaTXerg68SCyLkWw2ERsqoTMWRBZiZQ|TDWz9KfMo55wzj2brbgaXxnDz28nAbdPcY",
+#     payment_addresses = "yYe8KwyaUu5YswSYmB3q3ryx8XTUu9y7Ui|yTC62huR4YQEPn9AJHjnQxxreHSbgAoatV",
 #     payment_amounts  = "5|3"
 # )
 
