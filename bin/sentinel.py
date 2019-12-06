@@ -196,7 +196,7 @@ def process_args():
                         dest='bypass')
     parser.add_argument('-v', '--version',
                         action='store_true',
-                        help='Print the version (Dash Sentinel vX.X.X) and exit')
+                        help='Print the version (Polis Sentinel vX.X.X) and exit')
 
     args = parser.parse_args()
 

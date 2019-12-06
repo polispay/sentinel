@@ -12,6 +12,7 @@ sentinel_config_file = os.environ.get('SENTINEL_CONFIG', default_sentinel_config
 sentinel_cfg = PolisConfig.tokenize(sentinel_config_file)
 sentinel_version = "1.4.0"
 
+
 def get_polis_conf():
     if sys.platform == 'win32':
         polis_conf = os.path.join(os.getenv('APPDATA'), "PolisCore/polis.conf")

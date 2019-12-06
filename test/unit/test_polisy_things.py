@@ -7,7 +7,7 @@ sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), '../../
 
 @pytest.fixture
 def valid_polis_address(network='mainnet'):
-    return 'TXDSaTXerg68SCyLkWw2ERsqoTMWRBZiZQ' if (network == 'testnet') else 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdus'
+    return 'yjJqmSFVG4Hr4p1eNcBSBQkoWacnsKtEE5' if (network == 'testnet') else 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdus'
 
 
 @pytest.fixture

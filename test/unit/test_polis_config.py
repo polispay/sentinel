@@ -65,7 +65,7 @@ def test_get_rpc_creds():
 def test_slurp_config_file():
     import tempfile
 
-    dash_config = """# basic settings
+    polis_conf = """# basic settings
 #testnet=1 # TESTNET
 server=1
 printtoconsole=1
@@ -78,7 +78,7 @@ txindex=1 # enable transaction index
 """
 
     with tempfile.NamedTemporaryFile(mode='w') as temp:
-        temp.write(dash_config)
+        temp.write(polis_conf)
         temp.flush()
         conf = PolisConfig.slurp_config_file(temp.name)
         assert conf == expected_stripped_config
