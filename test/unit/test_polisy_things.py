@@ -7,12 +7,12 @@ sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), '../../
 
 @pytest.fixture
 def valid_polis_address(network='mainnet'):
-    return 'yjJqmSFVG4Hr4p1eNcBSBQkoWacnsKtEE5' if (network == 'testnet') else 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdus'
+    return 'yYe8KwyaUu5YswSYmB3q3ryx8XTUu9y7Ui' if (network == 'testnet') else 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdus'
 
 
 @pytest.fixture
 def invalid_polis_address(network='mainnet'):
-    return 'TXDSaTXerg68SCyLkWw2ERsqoTMWRBZiZr' if (network == 'testnet') else 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdut'
+    return 'yYe8KwyaUu5YswSYmB3q3ryx8XTUu9y7Uj' if (network == 'testnet') else 'PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdut'
 
 
 @pytest.fixture
@@ -25,9 +25,9 @@ def mn_list():
     from masternode import Masternode
 
     masternodelist_full = {
-        u'701854b26809343704ab31d1c45abc08f9f83c5c2bd503a9d5716ef3c0cda857-1': u'  ENABLED 70201 TPk18vGsifBT9Zcf4jExSvSfSnFLzBo4JS 1474157572    82842 1474152618  71111 52.90.74.124:24130',
-        u'f68a2e5d64f4a9be7ff8d0fbd9059dcd3ce98ad7a19a9260d1d6709127ffac56-1': u'  ENABLED 70201 TLErYAESrr1b3zEEebX3kegLB1Udyg1bsp 1474157732  1590425 1474155175  71122 [2604:a880:800:a1::9b:0]:24130',
-        u'656695ed867e193490261bea74783f0a39329ff634a10a9fb6f131807eeca744-1': u'  ENABLED 70201 TH6yFywNnZn9NDumfGrpLR8uX2FTK91isA 1474157704   824622 1474152571  71110 178.62.203.249:24130',
+        u'701854b26809343704ab31d1c45abc08f9f83c5c2bd503a9d5716ef3c0cda857-1': u'  ENABLED 70201 yjaFS6dudxUTxYPTDB9BYd1Nv4vMJXm3vK 1474157572    82842 1474152618  71111 52.90.74.124:24130',
+        u'f68a2e5d64f4a9be7ff8d0fbd9059dcd3ce98ad7a19a9260d1d6709127ffac56-1': u'  ENABLED 70201 yUuAsYCnG5XrjgsGvRwcDqPhgLUnzNfe8L 1474157732  1590425 1474155175  71122 [2604:a880:800:a1::9b:0]:24130',
+        u'656695ed867e193490261bea74783f0a39329ff634a10a9fb6f131807eeca744-1': u'  ENABLED 70201 yepN97UoBLoP2hzWnwWGRVTcWtw1niKwcB 1474157704   824622 1474152571  71110 178.62.203.249:24130',
     }
 
     mnlist = [Masternode(vin, mnstring) for (vin, mnstring) in masternodelist_full.items()]
@@ -41,7 +41,7 @@ def mn_status_good():
     status = {
         "vin": "CTxIn(COutPoint(f68a2e5d64f4a9be7ff8d0fbd9059dcd3ce98ad7a19a9260d1d6709127ffac56, 1), scriptSig=)",
         "service": "[2604:a880:800:a1::9b:0]:24130",
-        "pubkey": "PGQuyQ6rtG5XSVe1bXbR7PdghpAZQEYdus",
+        "pubkey": "yUuAsYCnG5XrjgsGvRwcDqPhgLUnzNfe8L",
         "status": "Masternode successfully started"
     }
     return status
@@ -122,8 +122,8 @@ def test_parse_masternode_status_vin():
 
 def test_hash_function():
     import polislib
-    sb_data_hex = '7b226576656e745f626c6f636b5f686569676874223a2037323639362c20227061796d656e745f616464726573736573223a20225458445361545865726736385343794c6b577732455273716f544d5752425a695a517c5444577a394b664d6f3535777a6a32627262676158786e447a32386e416264506359222c20227061796d656e745f616d6f756e7473223a202232352e37353030303030307c32352e3735303030303030222c202274797065223a20327d'
-    sb_hash = 'cad371468b3f12c7390911ddf8358c6bfaa685ab6f39e26677888fd12f212a93'
+    sb_data_hex = '7b226576656e745f626c6f636b5f686569676874223a2037323639362c20227061796d656e745f616464726573736573223a2022795965384b77796155753559737753596d42337133727978385854557539793755697c795965384b77796155753559737753596d4233713372797838585455753979375569222c20227061796d656e745f616d6f756e7473223a202232352e37353030303030307c32352e3735303030303030222c202274797065223a20327d'
+    sb_hash = '7ae8b02730113382ea75cbb1eecc497c3aa1fdd9e76e875e38617e07fb2cb21a'
 
     hex_hash = "%x" % polislib.hashit(sb_data_hex)
     assert hex_hash == sb_hash
